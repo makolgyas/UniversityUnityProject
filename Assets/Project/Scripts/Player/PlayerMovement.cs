@@ -4,19 +4,51 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
-    public float moveSpeed = 5f;
-    public FixedJoystick joystick;
-    private Rigidbody rb;
+    public VariableJoystick joystic;
+    public CharacterController controller;
+    public float movementSpeed;
+    public float rotationSpeed;
 
-    void Start()
+
+    public Canvas inputCanvas;
+    public bool isJoystick;
+
+    public Animator playerAnimator;
+
+    private void Start()
     {
-        rb = GetComponent<Rigidbody>();
+        EnableJoystickInput();
     }
 
-    void Update()
+
+    public void EnableJoystickInput()
     {
-        Vector3 move = new Vector3(joystick.Horizontal, 0, joystick.Vertical).normalized;
-        rb.velocity = move * moveSpeed;
+        isJoystick = true;
+        inputCanvas.gameObject.SetActive(true);
+    }
+
+    private void Update()
+    {
+        if (isJoystick)
+        {
+            var movementDirection = new Vector3(joystic.Direction.x, 0.0f, joystic.Direction.y);
+            controller.SimpleMove(movementDirection * movementSpeed);
+
+            if (movementDirection.sqrMagnitude <=0)
+            {
+                playerAnimator.SetBool("run", false);
+                return;
+            }
+
+            playerAnimator.SetBool("run", true);
+            var targetDirection = Vector3.RotateTowards(controller.transform.forward, movementDirection, rotationSpeed * Time.deltaTime, 0.0f);
+
+            controller.transform.rotation = Quaternion.LookRotation(targetDirection);
+        }
     }
 }
+
+
+
+
 
