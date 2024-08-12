@@ -15,6 +15,8 @@ public class PlayerMovement : MonoBehaviour
 
     public Animator playerAnimator;
 
+    public float playerHp = 10;
+
     private void Start()
     {
         EnableJoystickInput();
@@ -44,6 +46,15 @@ public class PlayerMovement : MonoBehaviour
             var targetDirection = Vector3.RotateTowards(controller.transform.forward, movementDirection, rotationSpeed * Time.deltaTime, 0.0f);
 
             controller.transform.rotation = Quaternion.LookRotation(targetDirection);
+        }
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "Enemy")
+        {
+            playerHp -= 10;
+            playerHp = playerHp - 10;
         }
     }
 }
