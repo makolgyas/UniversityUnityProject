@@ -15,8 +15,6 @@ public class PlayerMovement : MonoBehaviour
 
     public Animator playerAnimator;
 
-    public float playerHp = 10;
-
     private void Start()
     {
         EnableJoystickInput();
@@ -49,14 +47,7 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
-    {
-        if (other.tag == "Enemy")
-        {
-            playerHp -= 10;
-            playerHp = playerHp - 10;
-        }
-    }
+    
 }
 
 
